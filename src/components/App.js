@@ -55,16 +55,23 @@ const App = () => {
   }, []);
 
   const handleStart = () => {
-    if (currentTime === 0) {
-      startTime.current = Date.now();
-    } else {
-      startTime.current = Date.now() - currentTime * 1000;
+    if (intervalRef.current !== 0) {
+      return; // Timer is already running, ignore the click
     }
+  
+    startTime.current = Date.now() - currentTime * 1000;
+  
+    intervalRef.current = setInterval(() => {
+      setCurrentTime((Date.now() - startTime.current) / 1000);
+    }, 10);
   };
+  
 
   const handleStop = () => {
     clearInterval(intervalRef.current);
+    intervalRef.current = 0;
   };
+  
 
   const handleLap = () => {
     const lapTime = currentTime.toFixed(3);
