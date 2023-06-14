@@ -43,6 +43,14 @@ const App = () => {
   const [isLapSectionVisible, setIsLapSectionVisible] = useState(false);
 
   useEffect(() => {
+    startTime.current = Date.now();
+
+    return () => {
+      clearInterval(intervalRef.current);
+    };
+  }, []);
+
+  useEffect(() => {
     const updateTime = () => {
       setCurrentTime((Date.now() - startTime.current) / 1000);
     };
@@ -58,20 +66,18 @@ const App = () => {
     if (intervalRef.current !== 0) {
       return; // Timer is already running, ignore the click
     }
-  
+
     startTime.current = Date.now() - currentTime * 1000;
-  
+
     intervalRef.current = setInterval(() => {
       setCurrentTime((Date.now() - startTime.current) / 1000);
     }, 10);
   };
-  
 
   const handleStop = () => {
     clearInterval(intervalRef.current);
     intervalRef.current = 0;
   };
-  
 
   const handleLap = () => {
     const lapTime = currentTime.toFixed(3);
